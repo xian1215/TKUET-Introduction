@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap')
+//*代表所有的html的標籤指令，都要依照這樣格式進行
+
+//指定顏色變數
+$colorBlueRoofLight: #a8dadc
+$colorBlueRoofDark: #457b9d
+
+$colorGreyLight: #fafaf5
+$colorGreyNormal: #e3e2cf
+$colorGreyDark: #bebdaf
+$colorBackground: #2C2F36
+$colorBackground: #2C2F36
+
+$colorShadowBlue: #7cb1ff
+$colorShadowBlueLight: #8dc9fc
+
+$colorWindowGrey: #534d4d
+
+$colorBlue: #307BE1
+$colorskin: #fed9b7
+$colorDeepBlue: #457b9d
+$colorYellow: #FFC12C
+$colorOrange: #F38A0C
+$colorB: #d4a373
+$colorShadow: rgba(black,0.1)
+
+$shadowInset: inset -10px -10px 0px $colorShadow
+
+//定義漸層
+//屋頂的漸層
+$roofGradient: linear-gradient(150deg, $colorBlueRoofLight, $colorBlueRoofDark)
+//一整條從白天到晚上的背景顏色
+$sceneGradient: linear-gradient(#1D2B49, #1A45A0, #91cdff, #fff)
+
+$c1: #9e2a2b
+$box_bgc: #cddafd
+$box1_bgc: #fde2e4
+$box2_bgc: #fde2e4
+
+//設定元件的寬與高
+@mixin size($w, $h: $w, $bdrs: 0)
+    width: $w
+    height: $h
+    border-radius: $bdrs
+
+//設定下層的物件置中
+@mixin flex($j: center, $a: center)
+    display: flex
+    justify-content: $j //主軸線:左右
+    align-items: $a  //副軸線:上下
+
+//設定物件的位置，靠左多少px，靠上多少px
+@mixin abpos($l: initial, $t: initial)
+    position: absolute
+    left: $l
+    top: $t
+
+//畫圓弧的方框，可以直接畫圓
+@mixin bdrsRect($w,$h,$bdrs:$h/2)
+    +size($w,$h)
+    border-radius: $bdrs
+
+@mixin hair($w,$h)
+    +bdrsRect($w,$h)
+    box-shadow: $shadowInset
+
+//製造多人=================================================================
+@mixin person($x, $y, $s)
+    +size(400px, 300px, 200px)
+    @include abpos($x, $y)
+    .message
+        font-size: 20px
+        font-weight
+        position: relative
+        left: -150px
+        top: 50px
+        color: white
+        opacity: 0
+    .hairs
+        position: relative
+        left: -20px
+        top: -55px
+        .hair1
+            +hair(150px,180px)
+            background-color: #fff           
+            margin-left: 45px
+            margin-top: 80px
+            border-radius: 50px 50px 0 0 / 25px 25px 0 0
+        .hair2
+            +hair(250px,45px)
+            background-color: #fff           
+            margin-left: -5px
+            margin-top: -40px
+        .hair3
+            @include size(150px, 25px)
+            background-color: $colorBlue
+            margin-left: 45px
+            margin-top: -70px
+    .body
+        +bdrsRect(200px,120px,90px)
+        margin-top: -40px
+        padding-top: 50px
+        background-color: #fff
+        box-shadow: $shadowInset
+        .eyes
+            position: relative
+            left: 30px
+            .eye
+                +bdrsRect(50px,25px)
+                display: inline-block
+                margin-right: 20px
+                margin-left: 5px
+                background-color: #fff
+                .eyeball
+                    +bdrsRect(25px,25px) 
+                    background-color: $colorDeepBlue
+        .mouth
+            +bdrsRect(75px,25px)
+            margin-left: 60px
+            margin-top: 15px
+            background-color: $colorOrange
+            transform: translateX(20px)
+    transform: scale($s)
+//===========================================================
+
+//當person被點擊時會有的變化===========================================================
+@mixin person_active
+    .hairs 
+        transform: translateY(-25px)
+    .mouth
+        border-radius: 0 0 75px 75px / 0 0 50px 50px
+    .body
+        .eye
+            border-radius: 50px 50px 0 0 / 25px 25px 0 0
+//===========================================================
+
+*
+    font-family: "Playfair Display", "微軟正黑體"
+    //border: solid 2px black  //加上框線，實心線，2px線條粗細，黑
+html, body
+    @include size(100%)
+    position: relative
+    @include flex()  //讓下一層物件置中
+.box
+    @include size(450px, 450px, 15px)   //寬高，四個角的圓弧
+    @include abpos(100px, 400px)     //座位位置     
+    //background-color: $box_bgc   //背景顏色        
+    background: $roofGradient
+    background-color: $colorBlue
+    .title
+        position: absolute
+        left: 20px
+        top: 20px
+        margin: 0
+        font-size: 50px
+        color: White
+        opacity: 1
+        .question
+            font-size: 35px
+            color: $colorYellow
+            opacity: 0
+    .t5
+        @include size(220px, 40px)
+        position: absolute
+        left: 30px
+        top: 300px
+        margin: 0
+        font-size: 25px
+        color: $colorYellow
+        opacity: 1
+    .t6
+        @include size(300px, 40px)
+        position: absolute
+        left: 30px
+        top: 350px
+        margin: 0
+        font-size: 25px
+        color: $colorYellow
+        opacity: 1
+.person
+    +person(240px,80px,0.7)
+.person:active //在.person物件按下滑鼠
+    +person_active
+    .message
+        opacity: 1
+
+.person:hover //在person物件範圍內滑入滑鼠游標
+    .question
+        opacity: 1
+    transform: translateX(40px)
+    .body
+        box-shadow: $shadowInset, -30px 10px $colorShadow
+        background-color: $colorskin
+    .eyes
+        transform: translateX(10px)
+        .eyeball
+            margin-left: 20px
+    .mouth
+        width: 75px
+        height: 25px
+        margin-left: 60px
+        margin-top: 15px
+        background-color: $colorOrange
+        border-radius: 0 0 75px 75px / 0 0 50px 50px
+.box:hover //在box物件範圍內滑入滑鼠游標
+    .title
+        .question
+            opacity: 1
+    .person
+        margin-top: 50px  
+    .title   
+        opacity: 1
+    .body
+        box-shadow: $shadowInset, 30px 10px $colorShadow
+.box
+    .title
+        transition: 0.5s
+    .person
+        transition: 0.5s
+        *
+            transition: 0.5s
+        .body
+            transition: 0.5s ,background-color 2s 0.6s //延遲0.5秒後開始變化，0.6秒后開始背景色變化，2秒完成
+.box3
+    @include size(1480px, 125px)
+    @include abpos(0px, -10px)
+    background-color: $colorDeepBlue
+    .t2
+        color: White
+        @include size(400px, 100px)
+        @include abpos(20px,10px)
+    .t3
+        color: White
+        @include size(600px, 100px)
+        @include abpos(20px,60px)
+.box2
+    @include size(700px, 700px)
+    @include abpos(600px, 425px)
+    ul
+        li
+            // 標題樣式
+            h3  
+                color: $colorDeepBlue
+            // 內文樣式
+            p
+                color: $colorDeepBlue
+.box4
+    @include size(400px, 100px)
+    @include abpos(0px, 180px)
+    .t4
+        color: $colorOrange
+        @include size(500px, 100px)
+        @include abpos(100px,0px)
+    .t7
+        @include size(1200px, 100px)
+        @include abpos(100px,80px)
+    .t8
+        color: $colorOrange
+        @include size(500px, 100px)
+        @include abpos(100px,725px)
+    .t9
+        color: $colorOrange
+        @include size(700px, 100px)
+        @include abpos(100px,1200px)
+    .t10
+        color: $colorOrange
+        @include size(700px, 100px)
+        @include abpos(100px,2000px)
+.youtubeDisplay
+    @include size(1200px, 600px)  //要播放的寬高
+    @include abpos(120px, 1500px)  //位置
+.imageDisplay
+    @include size(1247px, 300px)  //要播放的寬高
+    @include abpos(100px, 1000px)  //位置
+    .img1
+        display: cover
+.h5pDisplay
+    @include size(1088px, 720px) // 更新大小以匹配 iframe 的新尺寸
+    @include abpos(320px, 2300px) // 根據需要調整位置
+.box5
+    @include size(1480px, 160px)
+    @include abpos(0px, 2900px)
+    background-color: $colorDeepBlue
+    .t11
+        color: White
+        @include size(300px, 20px)
+        @include abpos(50px,10px)
+    .t12
+        color: White
+        @include size(300px, 20px)
+        @include abpos(50px,50px)
+    .t13
+        color: White
+        @include size(300px, 20px)
+        @include abpos(50px,90px)
+
+    .person2
+        +person(1015px, -32px, 0.2)
+    .person2:active
+        +person_active
+
+    .person3
+        +person(1100px, -52px, 0.3)
+    .person3:active
+        +person_active
+
+    .person4
+        +person(1200px, -72px, 0.4)
+    .person4:active
+        +person_active
